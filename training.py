@@ -10,14 +10,14 @@ price_std = data_df["price"].std()
 
 #data standardisation to avoid risk of overflow
 data_df["km"] = (data_df["km"] - km_mean) / km_std
-data_df["price"] = (data_df["price"] - price_std) / price_std
+data_df["price"] = (data_df["price"] - price_mean) / price_std
 
 
 m = len(data_df.index)
 theta_df = pd.DataFrame(['theta0', 'theta1'])
 
-def get_theta():
-    learningRate = 0.0001
+def get_theta1():
+    learningRate = 0.01
     theta0 = 0
     theta1 = 0
     previous_cost = None
@@ -31,7 +31,7 @@ def get_theta():
         tmp1 = learningRate * get_sum_of_diff(predictions, data_df['price'], data_df['km']) / m
         theta0 -= tmp0
         theta1 -= tmp1
-    return theta0, theta1
+    return theta1
 
 def mean_squared_error(y_true, y_predicted):
     cost = np.sum((y_true-y_predicted)**2) / len(y_true)
@@ -46,7 +46,7 @@ def get_sum_of_diff(predictions, real_price, kilometer):
     diff = np.sum((p_array - r_array) * k_array)
     return diff
 
-theta0, theta1 = get_theta()
+theta1 = get_theta1()
 
 #data destandardisation to put it back to scale
 theta1 = theta1 * (price_std / km_std)
